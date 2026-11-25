@@ -527,6 +527,8 @@ $$('input[name="payment"]').forEach((input) => {
   input.addEventListener('change', () => {
     if (!input.checked) return;
     state.payment = input.value;
+    const appLabel = $('[data-selected-upi-app]');
+    if (appLabel) appLabel.textContent = input.value === 'UPI' ? 'UPI app' : input.value;
     renderSummary();
     renderGate();
   });
@@ -619,6 +621,41 @@ $('[data-copy-upi]')?.addEventListener('click', async (event) => {
   } catch {
     /* clipboard blocked — the id is visible to copy by hand */
   }
+});
+
+// Open the buyer's selected UPI app with the exact package amount pre-filled.
+// The QR remains available as a fallback on devices/browsers that block intents.
+const UPI_APP_PACKAGES = {
+  'PhonePe': 'com.phonepe.app',
+  'Google Pay': 'com.google.android.apps.nbu.paisa.user',
+  'Paytm': 'net.one97.paytm',
+};
+
+function openSelectedUpiApp() {
+  if (!payCfg.upiId) {
+    toast('UPI ID is not configured yet. Please scan the QR code instead.', { type: 'info' });
+    return;
+  }
+  if (!state.pkg) return;
+
+  const params = new URLSearchParams({
+    pa: payCfg.upiId,
+    pn: payCfg.payeeName || CONFIG.brand,
+    am: state.pkg.price.toFixed(2),
+    cu: 'INR',
+    tn: `DiamondVault ${state.pkg.label} — UID ${state.uid}`,
+  });
+  const query = params.toString();
+  const packageName = UPI_APP_PACKAGES[state.payment];
+  const paymentUrl = packageName
+    ? `intent://pay?${query}#Intent;scheme=upi;package=${packageName};end`
+    : `upi://pay?${query}`;
+
+  window.location.href = paymentUrl;
+}
+
+$('[data-open-upi-app]').forEach((button) => {
+  button.addEventListener('click', openSelectedUpiApp);
 });
 
 function setStage(stage) {
