@@ -63,6 +63,9 @@ function loadConfig() {
 }
 
 const config = loadConfig();
+// Public UPI receiver used by the checkout and dynamically generated QR codes.
+config.upiId = process.env.UPI_ID || 'topupvault@naviaxis';
+config.payeeName = process.env.UPI_PAYEE_NAME || 'TopUpVault';
 
 function saveConfig() {
   writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
