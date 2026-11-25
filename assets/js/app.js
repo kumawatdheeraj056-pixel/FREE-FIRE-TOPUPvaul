@@ -603,6 +603,7 @@ fetch(CONFIG.api.payConfig)
     if (!d?.ok) return;
     payCfg.verification = Boolean(d.verification);
     payCfg.upiId = d.upiId;
+    payCfg.payeeName = d.payeeName || CONFIG.brand;
     const row = $('[data-pay-upirow]');
     if (payCfg.upiId && row) {
       const code = $('[data-pay-upi]');
