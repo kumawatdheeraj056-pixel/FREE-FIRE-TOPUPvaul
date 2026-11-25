@@ -645,13 +645,10 @@ function openSelectedUpiApp() {
     cu: 'INR',
     tn: `DiamondVault ${state.pkg.label} — UID ${state.uid}`,
   });
-  const query = params.toString();
-  const packageName = UPI_APP_PACKAGES[state.payment];
-  const paymentUrl = packageName
-    ? `intent://pay?${query}#Intent;scheme=upi;package=${packageName};end`
-    : `upi://pay?${query}`;
 
-  window.location.href = paymentUrl;
+  // Use the standard UPI deep link so Android can show all installed UPI apps.
+  // A package-pinned intent can fail when the browser/app handler differs.
+  window.location.href = `upi://pay?${params.toString()}`;
 }
 
 $('[data-open-upi-app]')?.addEventListener('click', openSelectedUpiApp);
