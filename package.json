@@ -8,8 +8,8 @@
     "build": "tailwindcss -i ./src/input.css -o ./assets/css/app.css --minify",
     "dev": "tailwindcss -i ./src/input.css -o ./assets/css/app.css --watch",
     "test": "node --test",
-    "serve": "node server.ts",
-    "start": "npm run build && node server.ts"
+    "serve": "node server.mjs",
+"start": "npm run build && node server.mjs"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"
