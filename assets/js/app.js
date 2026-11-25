@@ -654,9 +654,7 @@ function openSelectedUpiApp() {
   window.location.href = paymentUrl;
 }
 
-$('[data-open-upi-app]').forEach((button) => {
-  button.addEventListener('click', openSelectedUpiApp);
-});
+$('[data-open-upi-app]')?.addEventListener('click', openSelectedUpiApp);
 
 function setStage(stage) {
   $$('[data-stage-panel]', payModal).forEach((panel) => {
